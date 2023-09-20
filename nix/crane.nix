@@ -10,7 +10,7 @@ let
   craneLib = crane.lib.${system};
 
   commonArgs = buildArgs // {
-    src = craneLib.cleanCargoSource (craneLib.path ./.);
+    src = craneLib.cleanCargoSource (craneLib.path src);
   };
 
   # Build *just* the cargo dependencies, so we can reuse

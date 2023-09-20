@@ -7,7 +7,7 @@
 
   };
 
-  outputs = { self, nixpkgs, ... }:
+  outputs = { self, nixpkgs, crane, ... }:
     let
       # todo : move crane logic out of flake.nix for readability
 

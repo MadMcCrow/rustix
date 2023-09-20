@@ -2,6 +2,8 @@
 # things only related to how to build bevy with nix
 pkgs:
 let
+  # shortcut
+  inherit (pkgs) lib;
   # for now : nothing is requiered for all platforms
   defaultDeps = [ ];
   # basically xOrg and wayland support
@@ -22,9 +24,13 @@ let
 in rec {
   # runtime deps :
   buildInputs = defaultDeps ++ (lib.optionals pkgs.stdenv.isLinux linuxDeps)
-    ++ (lib.optionals pkgs.stdenv.isDarwin);
+    ++ (lib.optionals pkgs.stdenv.isDarwin darwinDeps);
   # build deps :
-  nativeBuildInputs = [ pkgs.pkg-config ] ++ buildInputs;
+  nativeBuildInputs = [ pkgs.pkg-config pkgs.makeWrapper ] ++ buildInputs;
   # env-var to find libs :
   LD_LIBRARY_PATH = lib.makeLibraryPath buildInputs;
+
+    installPhase = ''wrapProgram $out/bin/bevy_game \
+      --set PATH ${lib.makeBinPath buildInputs}
+  '';
 }
